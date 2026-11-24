@@ -133,46 +133,26 @@
             </div>
         </section>
 
-        <!-- HALAMAN 2: MENU & ORDER (TANPA TOMBOL FILTER, LANGSUNG TAMPIL PER MENU/KATEGORI) -->
+        <!-- HALAMAN 2: MENU & ORDER (DENGAN TOMBOL FILTER KATEGORI) -->
         <section id="page-menu" class="page-section space-y-10">
-            <div class="bg-white dark:bg-stone-900 p-6 sm:p-8 rounded-3xl border border-stone-200 dark:border-stone-800 shadow-sm space-y-10">
-                <div class="border-b border-stone-200 dark:border-stone-800 pb-5">
-                    <span class="text-xs font-bold uppercase tracking-wider text-brand-600 dark:text-brand-400">Daftar Menu Tersedia</span>
-                    <h1 class="text-2xl sm:text-3xl font-extrabold mt-1">Pilih Menu Favoritmu</h1>
-                    <p class="text-stone-500 dark:text-stone-400 text-sm mt-1">Klik tombol <strong>+ Tambah</strong> pada menu di bawah untuk memasukkannya ke keranjang pesanan.</p>
+            <div class="bg-white dark:bg-stone-900 p-6 sm:p-8 rounded-3xl border border-stone-200 dark:border-stone-800 shadow-sm">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-stone-200 dark:border-stone-800 pb-6 mb-6">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-brand-600 dark:text-brand-400">Daftar Menu Tersedia</span>
+                        <h1 class="text-2xl sm:text-3xl font-extrabold mt-1">Pilih Menu Favoritmu</h1>
+                    </div>
+                    <!-- Filter Kategori -->
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="filterCategory('all')" id="cat-all" class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-brand-600 text-white transition-all">Semua</button>
+                        <button onclick="filterCategory('kopi-signature')" id="cat-kopi-signature" class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 transition-all">Kopi Signature</button>
+                        <button onclick="filterCategory('non-kopi')" id="cat-non-kopi" class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 transition-all">Non-Kopi</button>
+                        <button onclick="filterCategory('camilan')" id="cat-camilan" class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 transition-all">Camilan</button>
+                    </div>
                 </div>
 
-                <!-- BAGIAN 1: KOPI SIGNATURE -->
-                <div>
-                    <div class="flex items-center gap-2.5 mb-5">
-                        <span class="w-8 h-8 rounded-lg bg-brand-100 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 flex items-center justify-center">
-                            <i class="fas fa-mug-hot text-sm"></i>
-                        </span>
-                        <h2 class="text-xl font-extrabold">Kopi Signature</h2>
-                    </div>
-                    <div id="grid-kopi-signature" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"></div>
-                </div>
-
-                <!-- BAGIAN 2: NON-KOPI -->
-                <div class="pt-4 border-t border-stone-100 dark:border-stone-800">
-                    <div class="flex items-center gap-2.5 mb-5">
-                        <span class="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
-                            <i class="fas fa-leaf text-sm"></i>
-                        </span>
-                        <h2 class="text-xl font-extrabold">Non-Kopi</h2>
-                    </div>
-                    <div id="grid-non-kopi" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"></div>
-                </div>
-
-                <!-- BAGIAN 3: CAMILAN -->
-                <div class="pt-4 border-t border-stone-100 dark:border-stone-800">
-                    <div class="flex items-center gap-2.5 mb-5">
-                        <span class="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400 flex items-center justify-center">
-                            <i class="fas fa-cookie-bite text-sm"></i>
-                        </span>
-                        <h2 class="text-xl font-extrabold">Camilan & Pastry</h2>
-                    </div>
-                    <div id="grid-camilan" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"></div>
+                <!-- Grid Produk Menu Dinamis -->
+                <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                    <!-- Dirender oleh JS -->
                 </div>
             </div>
 
@@ -188,9 +168,7 @@
                     </div>
 
                     <div class="mb-6">
-                        <div id="cart-items-container" class="space-y-2.5 max-h-60 overflow-y-auto pr-1">
-                            <p class="text-xs text-stone-400 text-center py-4">Keranjang masih kosong.</p>
-                        </div>
+                        <div id="cart-items-container" class="space-y-2.5 max-h-60 overflow-y-auto pr-1"></div>
                         <div class="mt-3 p-4 rounded-2xl bg-brand-50 dark:bg-stone-800 flex justify-between items-center">
                             <span class="text-sm font-bold">Total Tagihan</span>
                             <span id="cart-total-price" class="text-2xl font-extrabold text-brand-700 dark:text-brand-400">Rp 0</span>
@@ -217,9 +195,9 @@
                         <div>
                             <label class="block text-xs font-bold uppercase text-stone-600 dark:text-stone-400 mb-2">Metode Pembayaran *</label>
                             <div class="grid grid-cols-3 gap-2.5">
-                                <button type="button" onclick="selectPaymentMethod('QRIS')" id="pay-btn-QRIS" class="pay-method-btn p-3 rounded-xl border-2 border-brand-600 bg-brand-50 dark:bg-brand-900/20 text-xs font-extrabold">QRIS</button>
-                                <button type="button" onclick="selectPaymentMethod('Transfer')" id="pay-btn-Transfer" class="pay-method-btn p-3 rounded-xl border border-stone-200 dark:border-stone-700 text-xs font-extrabold">Transfer</button>
-                                <button type="button" onclick="selectPaymentMethod('Tunai')" id="pay-btn-Tunai" class="pay-method-btn p-3 rounded-xl border border-stone-200 dark:border-stone-700 text-xs font-extrabold">Tunai</button>
+                                <button type="button" onclick="selectPaymentMethod('QRIS')" id="pay-btn-QRIS" class="pay-method-btn p-3 rounded-xl border-2 border-brand-600 bg-brand-50 text-xs font-extrabold">QRIS</button>
+                                <button type="button" onclick="selectPaymentMethod('Transfer')" id="pay-btn-Transfer" class="pay-method-btn p-3 rounded-xl border border-stone-200 text-xs font-extrabold">Transfer</button>
+                                <button type="button" onclick="selectPaymentMethod('Tunai')" id="pay-btn-Tunai" class="pay-method-btn p-3 rounded-xl border border-stone-200 text-xs font-extrabold">Tunai</button>
                             </div>
                         </div>
 
@@ -240,9 +218,8 @@
         </section>
     </main>
 
-    <!-- JAVASCRIPT: Data Menu Per Kategori & Logika Sistem -->
+    <!-- JAVASCRIPT: Logika Sistem -->
     <script>
-        // DATA PRODUK (Otomatis terpisah per kategori: 'kopi-signature', 'non-kopi', 'camilan')
         const products = [
             { id: 1, name: "Es Kopi Susu Gula Aren", category: "kopi-signature", price: 18000, desc: "Double shot espresso, susu creamy, dan gula aren organik.", badge: "Signature", image: "kopi-aren.jpg", icon: "fa-mug-hot" },
             { id: 2, name: "Manual Brew V60 Gayo", category: "kopi-signature", price: 22000, desc: "Seduhan manual biji kopi Aceh Gayo aroma fruity.", badge: "Single Origin", image: "v60.jpg", icon: "fa-filter" },
@@ -252,48 +229,52 @@
         ];
 
         let cart = [];
+        let currentCategory = 'all';
         let paymentMethod = 'QRIS';
 
-        // Navigasi antar halaman
         function navigateTo(pageId) {
             document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
             document.getElementById('page-' + pageId).classList.add('active');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Membuat HTML kartu menu
-        function createCardHTML(p) {
-            return `
-                <div class="bg-stone-50 dark:bg-stone-950 rounded-2xl border border-stone-200 dark:border-stone-800 overflow-hidden flex flex-col justify-between shadow-sm hover:shadow-md transition-all">
-                    <div class="relative h-44 overflow-hidden bg-stone-200 dark:bg-stone-800 flex items-center justify-center">
-                        <span class="absolute top-3 left-3 z-10 px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-brand-600 text-white shadow">${p.badge}</span>
-                        ${p.image ? `<img src="${p.image}" alt="${p.name}" onerror="this.style.display='none'" class="w-full h-full object-cover">` : ''}
-                        <i class="fas ${p.icon} text-4xl text-brand-600/40 absolute -z-0"></i>
-                    </div>
-                    <div class="p-4 flex flex-col flex-grow justify-between space-y-3">
-                        <div>
-                            <h3 class="font-bold text-base text-stone-900 dark:text-stone-100">${p.name}</h3>
-                            <p class="text-brand-600 dark:text-brand-400 font-extrabold text-sm mt-0.5">Rp ${p.price.toLocaleString('id-ID')}</p>
-                            <p class="text-xs text-stone-500 dark:text-stone-400 mt-1 leading-relaxed">${p.desc}</p>
+        function renderProducts(category = 'all') {
+            const grid = document.getElementById('product-grid');
+            grid.innerHTML = '';
+            
+            const filtered = category === 'all' ? products : products.filter(p => p.category === category);
+            
+            filtered.forEach(p => {
+                grid.innerHTML += `
+                    <div class="bg-stone-50 dark:bg-stone-950 rounded-2xl border border-stone-200 dark:border-stone-800 overflow-hidden flex flex-col justify-between shadow-sm hover:shadow-md transition-all">
+                        <div class="relative h-44 overflow-hidden bg-stone-200 dark:bg-stone-800 flex items-center justify-center">
+                            <span class="absolute top-3 left-3 z-10 px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-brand-600 text-white shadow">${p.badge}</span>
+                            ${p.image ? `<img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover">` : `<i class="fas ${p.icon} text-4xl text-brand-600"></i>`}
                         </div>
-                        <button onclick="addToCart(${p.id})" class="w-full py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold shadow transition-all flex items-center justify-center gap-1.5">
-                            <i class="fas fa-plus"></i> Tambah
-                        </button>
+                        <div class="p-4 flex flex-col flex-grow justify-between space-y-3">
+                            <div>
+                                <h3 class="font-bold text-base text-stone-900 dark:text-stone-100">${p.name}</h3>
+                                <p class="text-brand-600 dark:text-brand-400 font-extrabold text-sm mt-0.5">Rp ${p.price.toLocaleString('id-ID')}</p>
+                                <p class="text-xs text-stone-500 dark:text-stone-400 mt-1 leading-relaxed">${p.desc}</p>
+                            </div>
+                            <button onclick="addToCart(${p.id})" class="w-full py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold shadow transition-all flex items-center justify-center gap-1.5">
+                                <i class="fas fa-plus"></i> + Tambah
+                            </button>
+                        </div>
                     </div>
-                </div>
-            `;
+                `;
+            });
         }
 
-        // Render semua produk langsung terbagi per kelompok kategori
-        function renderAllMenusBySection() {
-            const categories = ['kopi-signature', 'non-kopi', 'camilan'];
-            categories.forEach(cat => {
-                const container = document.getElementById('grid-' + cat);
-                if (container) {
-                    const items = products.filter(p => p.category === cat);
-                    container.innerHTML = items.map(p => createCardHTML(p)).join('');
-                }
+        function filterCategory(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.classList.remove('bg-brand-600', 'text-white');
+                btn.classList.add('bg-stone-100', 'dark:bg-stone-800', 'text-stone-700', 'dark:text-stone-300');
             });
+            document.getElementById('cat-' + cat).classList.add('bg-brand-600', 'text-white');
+            document.getElementById('cat-' + cat).classList.remove('bg-stone-100', 'dark:bg-stone-800', 'text-stone-700', 'dark:text-stone-300');
+            renderProducts(cat);
         }
 
         function addToCart(id) {
@@ -307,6 +288,7 @@
             const container = document.getElementById('cart-items-container');
             const totalBadge = document.getElementById('nav-cart-badge');
             const mobileBadge = document.getElementById('mobile-cart-badge');
+            const totalItemsEl = document.getElementById('cart-total-items');
             const totalPriceEl = document.getElementById('cart-total-price');
             const clearBtn = document.getElementById('clear-cart-btn');
 
@@ -360,12 +342,10 @@
         function selectPaymentMethod(method) {
             paymentMethod = method;
             document.querySelectorAll('.pay-method-btn').forEach(b => {
-                b.classList.remove('border-brand-600', 'bg-brand-50', 'dark:bg-brand-900/20');
-                b.classList.add('border-stone-200', 'dark:border-stone-700');
+                b.classList.remove('border-brand-600', 'bg-brand-50');
+                b.classList.add('border-stone-200');
             });
-            const activeBtn = document.getElementById('pay-btn-' + method);
-            activeBtn.classList.remove('border-stone-200', 'dark:border-stone-700');
-            activeBtn.classList.add('border-brand-600', 'bg-brand-50', 'dark:bg-brand-900/20');
+            document.getElementById('pay-btn-' + method).classList.add('border-brand-600', 'bg-brand-50');
         }
 
         function handleCheckout(e) {
@@ -375,7 +355,6 @@
             clearCart();
         }
 
-        // Dark Mode Toggle
         document.getElementById('theme-toggle').addEventListener('click', () => {
             document.documentElement.classList.toggle('dark');
             const isDark = document.documentElement.classList.contains('dark');
@@ -386,8 +365,7 @@
             document.getElementById('mobile-menu').classList.toggle('hidden');
         });
 
-        // Inisialisasi awal
-        renderAllMenusBySection();
+        renderProducts();
     </script>
 </body>
 </html>
